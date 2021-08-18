@@ -21,7 +21,7 @@
 
 6.4. [PostgreSQL](6.4.md)
 
-6.5. [Elasticsearch]()
+6.5. [Elasticsearch](6.5.md)
 
 6.6. [Troubleshooting]()
 
