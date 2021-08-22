@@ -23,7 +23,7 @@
 
 6.5. [Elasticsearch](6.5.md)
 
-6.6. [Troubleshooting]()
+6.6. [Troubleshooting](6.6.md)
 
 ## Модуль 7. Облачная инфраструктура. Terraform
 
