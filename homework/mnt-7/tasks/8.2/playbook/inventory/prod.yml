@@ -1,0 +1,16 @@
+---
+elasticsearch:
+  hosts:
+    elasticsearch:
+      ansible_host: 192.168.31.152
+      ansible_connection: ssh
+      ansible_user: ubuntu
+      ansible_ssh_pass: ubuntu
+
+kibana:
+  hosts:
+    kibana:
+      ansible_host: 192.168.31.109
+      ansible_connection: ssh
+      ansible_user: ubuntu
+      ansible_ssh_pass: ubuntu
