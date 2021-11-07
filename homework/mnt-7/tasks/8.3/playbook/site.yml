@@ -1,0 +1,64 @@
+---
+- name: Install Elasticsearch
+  hosts: elasticsearch
+  handlers:
+    - name: restart Elasticsearch
+      become: true
+      service:
+        name: elasticsearch
+        state: restarted
+  tasks:
+    - name: "Download Elasticsearch's rpm"
+      get_url:
+        url: "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-{{ elk_stack_version }}-x86_64.rpm"
+        dest: "/tmp/elasticsearch-{{ elk_stack_version }}-x86_64.rpm"
+      register: download_elastic
+      until: download_elastic is succeeded
+    - name: Install Elasticsearch
+      become: true
+      yum:
+        name: "/tmp/elasticsearch-{{ elk_stack_version }}-x86_64.rpm"
+        state: present
+    - name: Configure Elasticsearch
+      become: true
+      template:
+        src: elasticsearch.yml.j2
+        dest: /etc/elasticsearch/elasticsearch.yml
+      notify: restart Elasticsearch
+
+- name: Install Kibana
+  hosts: kibana
+  tasks:
+    - name: Add source list
+      become: true
+      template:
+        src: elastic.list.yml.j2
+        dest: /etc/apt/sources.list.d/elastic-7.x.list
+    - name: Install apt-transport-https
+      become: true
+      apt:
+        pkg:
+          - apt-transport-https
+          - kibana
+        state: present
+        update_cache: true
+        force: true
+        autoclean: yes
+
+- name: Install Filebeat
+  hosts: kibana
+  tasks:
+    - name: Upload deb Filebeat from remote URL
+      get_url:
+        url: "https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ filebeat_version }}-amd64.deb"
+        dest: "/tmp/filebeat-{{ filebeat_version }}-amd64.deb"
+        mode: 0755
+        timeout: 60
+        force: true
+        validate_certs: false
+      register: get_filebeat
+      until: get_filebeat is succeeded
+    - name: Install Filebeat
+      become: true
+      apt:
+        deb: "/tmp/filebeat-{{ filebeat_version }}-amd64.deb"

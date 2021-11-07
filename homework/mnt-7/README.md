@@ -7,7 +7,7 @@
 
 8.2. [Работа с Playbook](tasks/8.2.md)
 
-8.3. [](8.3.md)
+8.3. [Использование Yandex Cloud](tasks/8.3.md)
 
 8.4. [](8.4.md)
 
